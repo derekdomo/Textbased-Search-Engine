@@ -72,12 +72,12 @@ public class QryopSlWAND extends QryopSl {
             sumweights+=weights.get(i);
         //computes a score for a document that is a weighted product of the scores produced by its arguments
         boolean alldone=false;
+        int length=this.daatPtrs.size();
         while (!alldone) {
             int nextDocID = getSmallestCurrentDocid();
             if (nextDocID==Integer.MAX_VALUE)
                 break;
             double score=1;
-            int length=this.daatPtrs.size();
             for (int i=0; i<this.daatPtrs.size(); i++) {
                 DaaTPtr ptr = this.daatPtrs.get(i);
                 if (ptr.nextDoc>=ptr.scoreList.scores.size()||nextDocID != ptr.scoreList.getDocid(ptr.nextDoc)) {

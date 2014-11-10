@@ -144,14 +144,17 @@ public class QryopSlAnd extends QryopSl {
         allocDaaTPtrs (r);
         QryResult result = new QryResult ();
 
-
         boolean alldone=false;
+        int length = this.daatPtrs.size();
+        for (int i=0; i<this.daatPtrs.size(); i++) {
+            if (this.daatPtrs.get(i).scoreList.scores.size()==0)
+                length-=1;
+        }
         while (!alldone) {
             int nextDocID = getSmallestCurrentDocid();
             if (nextDocID==Integer.MAX_VALUE)
                 break;
             double score=1;
-            int length = this.daatPtrs.size();
             for (int i=0; i<this.daatPtrs.size(); i++) {
                 DaaTPtr ptr = this.daatPtrs.get(i);
                 if (ptr.nextDoc>=ptr.scoreList.scores.size()||nextDocID != ptr.scoreList.getDocid(ptr.nextDoc)) {
