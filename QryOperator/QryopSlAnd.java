@@ -196,11 +196,16 @@ public class QryopSlAnd extends QryopSl {
         return (0.0);
     else if (r instanceof RetrievalModelIndri) {
         double score=1;
+        int length=this.args.size();
         for (int i=0; i<this.args.size(); i++) {
+            if (this.args.get(i).args.size()==0){
+                length=length-1;
+                continue;
+            }
             if (this.args.get(i) instanceof QryopSl)
                 score=score*((QryopSl) this.args.get(i)).getDefaultScore(r, docid);
         }
-        score = Math.pow(score, 1/(double)this.args.size());
+        score = Math.pow(score, 1/(double)length);
         if (this.args.size()==0)
             return 0;
         return score;

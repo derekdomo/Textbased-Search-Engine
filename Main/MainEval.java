@@ -303,7 +303,6 @@ public class MainEval {
             System.err.println("Error:  Query syntax is incorrect.  " + qString);
             return null;
         }
-        System.out.println("Query: "+currentOp.toString());
         return currentOp;
     }
 
@@ -475,7 +474,6 @@ public class MainEval {
             for (Map.Entry<String, String> entry : qPairs.entrySet()) {
                 qTree = parseQuery(entry.getValue(), model);
                 QryResult result = qTree.evaluate(model);
-                System.out.println(entry.getKey() + ":  " + entry.getValue());
                 if (result.docScores.scores.size() < 1) {
                     writer.write(entry.getKey() + "\t" + "Q0" + "\t"
                             + "dummy\t"
@@ -486,6 +484,7 @@ public class MainEval {
                         if (!externalID.containsKey(result.docScores.getDocid(i)))
                             externalID.put(result.docScores.getDocid(i), getExternalDocid(result.docScores.getDocid(i)));
                     }
+                    //System.out.println(getInternalDocid("clueweb09-en0004-37-01664"));
                     result.sort();
                     int length;
                     if (result.docScores.scores.size() <= 100)

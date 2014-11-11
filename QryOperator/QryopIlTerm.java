@@ -60,7 +60,6 @@ public class QryopIlTerm extends QryopIl {
   public QryResult evaluate(RetrievalModel r) throws IOException {
     QryResult result = new QryResult();
     result.invertedList = new InvList(this.term, this.field);
-    System.out.println(this.term+" "+this.field+" "+result.invertedList.ctf);
     return result;
   }
 

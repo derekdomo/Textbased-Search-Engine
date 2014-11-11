@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by XiangyuSun on 10/10/14.
- */
+
 public class QryopSlWAND extends QryopSl {
     public ArrayList<Double> weights = new ArrayList<Double>();
     public double sumweights=0;
@@ -73,6 +71,12 @@ public class QryopSlWAND extends QryopSl {
         //computes a score for a document that is a weighted product of the scores produced by its arguments
         boolean alldone=false;
         int length=this.daatPtrs.size();
+        for (int i=0; i<this.daatPtrs.size(); i++) {
+            if (this.daatPtrs.get(i).scoreList.scores.size()==0){
+                length-=1;
+                sumweights-=weights.get(i);
+            }
+        }
         while (!alldone) {
             int nextDocID = getSmallestCurrentDocid();
             if (nextDocID==Integer.MAX_VALUE)
@@ -82,8 +86,6 @@ public class QryopSlWAND extends QryopSl {
                 DaaTPtr ptr = this.daatPtrs.get(i);
                 if (ptr.nextDoc>=ptr.scoreList.scores.size()||nextDocID != ptr.scoreList.getDocid(ptr.nextDoc)) {
                     double defaultscore = ((QryopSl)this.args.get(i)).getDefaultScore(r, nextDocID);
-                    if (defaultscore==0)
-                        defaultscore=1;
                     score = score * Math.pow(defaultscore, this.weights.get(i)/sumweights);
                 }else if (nextDocID == ptr.scoreList.getDocid(ptr.nextDoc)) {
                     double tmp = ptr.scoreList.getDocidScore(ptr.nextDoc);
@@ -114,7 +116,12 @@ public class QryopSlWAND extends QryopSl {
             return (0.0);
         else if (r instanceof RetrievalModelIndri) {
             double score=1;
+            int length=this.args.size();
             for (int i=0; i<this.args.size(); i++) {
+                if (this.args.get(i).args.size()==0){
+                    length=length-1;
+                    continue;
+                }
                 if (this.args.get(i) instanceof QryopSl)
                     score=score*Math.pow(((QryopSl) this.args.get(i)).getDefaultScore(r, docid), this.weights.get(i)/sumweights);
             }

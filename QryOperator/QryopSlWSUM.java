@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import DataStructure.ScoreList;
 
-/**
- * Created by XiangyuSun on 10/10/14.
- */
 public class QryopSlWSUM extends QryopSl {
     public ArrayList<Double> weights = new ArrayList<Double>();
     public double sumweights=0;
@@ -20,8 +16,6 @@ public class QryopSlWSUM extends QryopSl {
      *  Appends an argument to the list of query operator arguments.  This
      *  simplifies the design of some query parsing architectures.
      *  @param a The query argument (query operator) to append.
-     *  @return void
-     *  @throws java.io.IOException]
      */
     public void addWeight (double a) {
         this.weights.add(a);
@@ -32,8 +26,6 @@ public class QryopSlWSUM extends QryopSl {
      *  Appends an argument to the list of query operator arguments.  This
      *  simplifies the design of some query parsing architectures.
      *  @param a The query argument (query operator) to append.
-     *  @return void
-     *  @throws java.io.IOException
      */
     public void add (Qryop a) {
         this.args.add(a);
@@ -72,6 +64,7 @@ public class QryopSlWSUM extends QryopSl {
         for (int i=0; i<weights.size(); i++)
             sumweights+=weights.get(i);
         //computes a score for a document that is a weighted average of the scores produced by its arguments
+        int length=this.daatPtrs.size();
         while (this.daatPtrs.size() > 0) {
             int count=0;
             int nextDocID = getSmallestCurrentDocid();
@@ -86,18 +79,16 @@ public class QryopSlWSUM extends QryopSl {
                 } else if (ptr.scoreList.getDocid(ptr.nextDoc) == nextDocID) {
                     tempRes += weights.get(i)/sumweights*ptr.scoreList.getDocidScore(ptr.nextDoc);
                     ptr.nextDoc++;
-
                 }
             }
             res.docScores.add(nextDocID, tempRes);
             for (int i=this.daatPtrs.size()-1; i>=0; i--) {
                 DaaTPtr ptri = this.daatPtrs.get(i);
-
                 if (ptri.nextDoc >= ptri.scoreList.scores.size()) {
                     count++;
                 }
             }
-            if (count==3)
+            if (count==length)
                 break;
         }
         return res;
@@ -124,7 +115,7 @@ public class QryopSlWSUM extends QryopSl {
      */
     public String toString(){
 
-        String result = new String ();
+        String result ="";
         int j=0;
         for (Iterator<Qryop> i = this.args.iterator(); i.hasNext(); j++)
             result += (weights.get(j).toString()+" "+i.next().toString() + " ");
