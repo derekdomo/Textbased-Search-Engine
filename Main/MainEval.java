@@ -418,29 +418,8 @@ public class MainEval {
             System.exit(1);
         }
 
-    /*get the model*/
-        RetrievalModel model;
-        if (!params.containsKey("retrievalAlgorithm")) {
-            model = new RetrievalModelUnrankedBoolean();
-        }
-        if (params.get("retrievalAlgorithm").equalsIgnoreCase("RankedBoolean")) {
-            model = new RetrievalModelRankedBoolean();
-        } else if (params.get("retrievalAlgorithm").equalsIgnoreCase("UnrankedBoolean")) {
-            model = new RetrievalModelUnrankedBoolean();
-        } else if (params.get("retrievalAlgorithm").equalsIgnoreCase("BM25")) {
-            model = new RetrievalModelBM25();
-        } else {
-            model = new RetrievalModelIndri();
-        }
-    /*set the parameters*/
-        if (model instanceof RetrievalModelBM25) {
-            model.setParameter("BM25:k_1", params.get("BM25:k_1"));
-            model.setParameter("BM25:b", params.get("BM25:b"));
-            model.setParameter("BM25:k_3", params.get("BM25:k_3"));
-        } else if (model instanceof RetrievalModelIndri) {
-            model.setParameter("Indri:mu", params.get("Indri:mu"));
-            model.setParameter("Indri:lambda", params.get("Indri:lambda"));
-        }
+    /*initiate the model*/
+        RetrievalModel model = initModel(params);
     /*get the queries*/
         if (!params.containsKey("queryFilePath")) {
             System.err.println("Error: Parameters were missing.");
@@ -595,4 +574,43 @@ public class MainEval {
         writer.close();
         return qPairs;
     }
-}
+    /**
+     * Gather the model information
+     * */
+    static RetrievalModel initModel(Map<String, String> params) {
+        RetrievalModel model;
+        if (!params.containsKey("retrievalAlgorithm")) {
+            model = new RetrievalModelUnrankedBoolean();
+        }
+        if (params.get("retrievalAlgorithm").equalsIgnoreCase("RankedBoolean")) {
+            model = new RetrievalModelRankedBoolean();
+        } else if (params.get("retrievalAlgorithm").equalsIgnoreCase("UnrankedBoolean")) {
+            model = new RetrievalModelUnrankedBoolean();
+        } else if (params.get("retrievalAlgorithm").equalsIgnoreCase("BM25")) {
+            model = new RetrievalModelBM25();
+        } else if (params.get("retrievalAlgorithm").equalsIgnoreCase("letor")){
+            model = new RetrievalModelLearnToRank();
+        } else {
+            model = new RetrievalModelIndri();
+        }
+    /*set the parameters*/
+        if (model instanceof RetrievalModelBM25) {
+            model.setParameter("BM25:k_1", params.get("BM25:k_1"));
+            model.setParameter("BM25:b", params.get("BM25:b"));
+            model.setParameter("BM25:k_3", params.get("BM25:k_3"));
+        } else if (model instanceof RetrievalModelIndri) {
+            model.setParameter("Indri:mu", params.get("Indri:mu"));
+            model.setParameter("Indri:lambda", params.get("Indri:lambda"));
+        } else if (model instanceof RetrievalModelLearnToRank) {
+            model.setParameter("trainingQueryFile", params.get("letor:trainingQueryFile")));
+            model.setParameter("trainingQrelsFile", params.get("letor:trainingQrelsFile"));
+            model.setParameter("trainingFeatureVectorsFile", params.get("letor:trainingFeatureVectorsFile"));
+            model.setParameter("pageRankFile", params.get("letor:pageRankFile"));
+            model.setParameter("featureDisable", params.get("letor:featureDisable"));
+            model.setParameter("svmRankLearnPath", params.get("letor:svmRankClassifyPath"));
+            model.setParameter("svmRankClassifyPath", params.get("letor:svmRankClassifyPath"));
+            //model.setParameter("");
+        }
+        return model;
+    }
+ }

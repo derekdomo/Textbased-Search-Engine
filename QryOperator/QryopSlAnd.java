@@ -6,9 +6,7 @@ package QryOperator;
  */
 
 import DataStructure.*;
-import Main.*;
 import RetrievalModel.*;
-import java.util.*;
 import java.io.*;
 
 public class QryopSlAnd extends QryopSl {
@@ -19,16 +17,14 @@ public class QryopSlAnd extends QryopSl {
    *  @param q A query argument (a query operator).
    */
   public QryopSlAnd(Qryop... q) {
-    for (int i = 0; i < q.length; i++)
-      this.args.add(q[i]);
+    for (Qryop iter: q)
+      this.args.add(iter);
   }
 
   /**
    *  Appends an argument to the list of query operator arguments.  This
    *  simplifies the design of some query parsing architectures.
    *  @param {q} q The query argument (query operator) to append.
-   *  @return void
-   *  @throws IOException
    */
   public void add (Qryop a) {
     this.args.add(a);
@@ -146,10 +142,9 @@ public class QryopSlAnd extends QryopSl {
 
         boolean alldone=false;
         int length = this.daatPtrs.size();
-        for (int i=0; i<this.daatPtrs.size(); i++) {
-            if (this.daatPtrs.get(i).scoreList.scores.size()==0)
-                length-=1;
-        }
+        for (int i=0; i<this.daatPtrs.size(); i++)
+            if (this.daatPtrs.get(i).scoreList.scores.size() == 0)
+                length -= 1;
         while (!alldone) {
             int nextDocID = getSmallestCurrentDocid();
             if (nextDocID==Integer.MAX_VALUE)
