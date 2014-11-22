@@ -19,6 +19,7 @@ public class QryopIlTerm extends QryopIl {
 
   private String term;
   private String field;
+  private static String defaultField="field";
 
   /**
    *  Constructor.  The term is assumed to match the body field.
@@ -27,10 +28,15 @@ public class QryopIlTerm extends QryopIl {
    */
   public QryopIlTerm(String t){
     this.term = t;
-    this.field = "body";	// Default field if none is specified.
+    this.field = defaultField;	// Default field if none is specified.
   }
-
-  /**
+   /**
+    * set defaultField
+    * */
+   public static void setDefaultField(String field) {
+        defaultField = field;
+   }
+   /**
    *  Constructor.  The term matches in the specified field.
    *  @param t A term string.
    *  @param f A field name.

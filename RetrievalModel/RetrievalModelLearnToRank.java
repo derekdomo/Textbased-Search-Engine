@@ -15,6 +15,9 @@ public class RetrievalModelLearnToRank extends RetrievalModel {
     public String svmRankModelFile;
     public String testingFeatureVectorsFile;
     public String testingDocumentScores;
+    public double k1,b,k3;
+    public double mu, lambda;
+
     /**
      *  Set a retrieval model parameter.
      *  @param parameterName The name of the parameter to set.
@@ -36,26 +39,37 @@ public class RetrievalModelLearnToRank extends RetrievalModel {
      *  @return true if the parameter is set successfully, false otherwise.
      */
     public boolean setParameter (String parameterName, String value){
-        if (parameterName.equalsIgnoreCase("trainQueryFile")) {
+        if (parameterName.equalsIgnoreCase("letor:trainQueryFile")) {
             trainQueryFile=value;
-        } else if (parameterName.equalsIgnoreCase("trainingQrelsFile")) {
+        } else if (parameterName.equalsIgnoreCase("letor:trainingQrelsFile")) {
             trainingQrelsFile=value;
-        } else if (parameterName.equalsIgnoreCase("trainingFeatureVectorsFile")) {
+        } else if (parameterName.equalsIgnoreCase("letor:trainingFeatureVectorsFile")) {
             trainingFeatureVectorsFile=value;
-        } else if (parameterName.equalsIgnoreCase("pageRankFile")) {
-            pageRankFile=value;
-        } else if  (parameterName.equalsIgnoreCase("featureDisable")) {
+        } else if  (parameterName.equalsIgnoreCase("letor:featureDisable")) {
             featureDisable=value;
-        } else if (parameterName.equalsIgnoreCase("svmRankLearnPath")) {
+        } else if (parameterName.equalsIgnoreCase("letor:svmRankLearnPath")) {
             svmRankLearnPath=value;
-        } else if (parameterName.equalsIgnoreCase("svmRankClassifyPath")) {
+        } else if (parameterName.equalsIgnoreCase("letor:svmRankClassifyPath")) {
             svmRankClassifyPath=value;
-        } else if (parameterName.equalsIgnoreCase("svmRankModelFile")) {
+        } else if (parameterName.equalsIgnoreCase("letor:svmRankModelFile")) {
             svmRankModelFile=value;
-        } else if (parameterName.equalsIgnoreCase("testingFeatureVectorsFile")) {
+        } else if (parameterName.equalsIgnoreCase("letor:testingFeatureVectorsFile")) {
             testingFeatureVectorsFile=value;
-        } else if (parameterName.equalsIgnoreCase("testingDocumentScores")) {
+        } else if (parameterName.equalsIgnoreCase("letor:testingDocumentScores")) {
             testingDocumentScores=value;
+        } else if (parameterName.equalsIgnoreCase("svmRankParamC")) {
+            svmRankParamC = Double.parseDouble(value);
+        }else if (parameterName.equalsIgnoreCase("BM25:k_1")) {
+            k1 = Double.parseDouble(value);
+        } else if (parameterName.equalsIgnoreCase("BM25:b")) {
+            b = Double.parseDouble(value);
+        } else if (parameterName.equalsIgnoreCase("BM25:k_3")) {
+            k3 = Double.parseDouble(value);
+        } else if (parameterName.equalsIgnoreCase("Indri:mu")) {
+            mu = Integer.parseInt(value);
+        } else if (parameterName.equalsIgnoreCase("Indri:lambda")) {
+            System.out.println(lambda);
+            lambda = Double.parseDouble(value);
         } else {
             return false;
         }

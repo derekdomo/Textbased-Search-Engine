@@ -159,5 +159,18 @@ public class TermVector {
   public int stemDf(int i) throws IOException {
     return MainEval.READER.docFreq(terms[i]);
   }
-  
-}
+
+  /**
+   * return overlap
+   * */
+  public double overlap(String[] query) {
+    int count=0;
+    for (String term : query) {
+        for (int i=1; i<stems.length; i++)
+            if (stems[i].equalsIgnoreCase(term)) {
+                count++;
+            }
+        }
+    return count/(double) query.length;
+  }
+ }
