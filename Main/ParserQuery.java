@@ -236,7 +236,7 @@ public class ParserQuery {
      * @return Array of query tokens
      * @throws java.io.IOException
      */
-    static String[] tokenizeQuery(String query) throws IOException {
+    public static String[] tokenizeQuery(String query) throws IOException {
 
         Analyzer.TokenStreamComponents comp = analyzer.createComponents("dummy", new StringReader(query));
         TokenStream tokenStream = comp.getTokenStream();

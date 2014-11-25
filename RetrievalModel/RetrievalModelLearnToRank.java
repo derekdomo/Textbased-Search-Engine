@@ -38,14 +38,16 @@ public class RetrievalModelLearnToRank extends RetrievalModel {
      *  @param value The parameter's value.
      *  @return true if the parameter is set successfully, false otherwise.
      */
-    public boolean setParameter (String parameterName, String value){
+    public boolean setParameter(String parameterName, String value) {
         if (parameterName.equalsIgnoreCase("letor:trainQueryFile")) {
-            trainQueryFile=value;
+            trainQueryFile = value;
         } else if (parameterName.equalsIgnoreCase("letor:trainingQrelsFile")) {
-            trainingQrelsFile=value;
+            trainingQrelsFile = value;
         } else if (parameterName.equalsIgnoreCase("letor:trainingFeatureVectorsFile")) {
-            trainingFeatureVectorsFile=value;
-        } else if  (parameterName.equalsIgnoreCase("letor:featureDisable")) {
+            trainingFeatureVectorsFile = value;
+        } else if (parameterName.equalsIgnoreCase("letor:pageRankFile=")) {
+            pageRankFile = value;
+        } else if (parameterName.equalsIgnoreCase("letor:featureDisable")) {
             featureDisable=value;
         } else if (parameterName.equalsIgnoreCase("letor:svmRankLearnPath")) {
             svmRankLearnPath=value;

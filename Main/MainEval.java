@@ -192,10 +192,6 @@ public class MainEval {
 
         /*initiate the model*/
         RetrievalModel model = initModel(params);
-        if (model instanceof RetrievalModelLearnToRank) {
-           // learnToRankTrainEntr();
-            printMemoryUsage(false);
-        }
         /*get the queries*/
         if (!params.containsKey("queryFilePath")) {
             System.err.println("Error: Parameters were missing.");
@@ -209,6 +205,10 @@ public class MainEval {
             qPairs.put(pair[0].trim(), pair[1].trim());
         } while (scan.hasNext());
         scan.close();
+        if (model instanceof RetrievalModelLearnToRank){
+            letor((RetrievalModelLearnToRank)model, params);
+            return;
+        }
         if (params.containsKey("fb"))
             if (params.get("fb").equalsIgnoreCase("true")) {
                 qPairs = queryExpansion(params, model, qPairs);
@@ -357,7 +357,14 @@ public class MainEval {
     /**
      *  Learn to Rank Entrance
      * */
-    /**
+    public static void letor(RetrievalModelLearnToRank r, Map<String, String> params) throws Exception {
+        LearnToRank.initPara(r, params);
+        LearnToRank.calFeatureForTrain();
+        LearnToRank.train();
+
+       // LearnToRank.classify();
+    }
+     /**
      * Run All Query
      * */
     static void searchAllQuery(Map<String, String> qPairs, Map<String, String> params, RetrievalModel model) throws Exception {
@@ -394,6 +401,7 @@ public class MainEval {
                       }
                   }
               }
+              writer.close();
           } catch (Exception e) {
               e.printStackTrace();
           } finally {
