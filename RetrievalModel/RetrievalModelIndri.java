@@ -15,7 +15,9 @@ public class RetrievalModelIndri extends RetrievalModel {
     public boolean setParameter (String parameterName, double value){
         if (parameterName.equalsIgnoreCase("Indri:lambda")) {
             lambda = value;
-        } else
+        } else if (parameterName.equalsIgnoreCase("Indri:mu")) {
+            mu = (int)value;
+        }else
             return false;
         return true;
     }

@@ -38,7 +38,7 @@ public class MainEval {
     //  isn't great programming style, but the alternative is for every
     //  query operator to store or pass this value, which creates its
     //  own headaches.
-    static Map<Integer, String> externalID = new HashMap<Integer, String>();
+    public static Map<Integer, String> externalID = new HashMap<Integer, String>();
 
     /**
      * Write an error message and exit.  This can be done in other
@@ -183,7 +183,8 @@ public class MainEval {
             System.err.println("Error: Parameters were missing.");
             System.exit(1);
         }
-        // open the index
+
+        /*open the index*/
         READER = DirectoryReader.open(FSDirectory.open(new File(params.get("indexPath"))));
         if (READER == null) {
             System.err.println(usage);
@@ -192,6 +193,7 @@ public class MainEval {
 
         /*initiate the model*/
         RetrievalModel model = initModel(params);
+
         /*get the queries*/
         if (!params.containsKey("queryFilePath")) {
             System.err.println("Error: Parameters were missing.");
@@ -205,14 +207,19 @@ public class MainEval {
             qPairs.put(pair[0].trim(), pair[1].trim());
         } while (scan.hasNext());
         scan.close();
+
+        /* learn to rank needs to go another way */
         if (model instanceof RetrievalModelLearnToRank){
             letor((RetrievalModelLearnToRank)model, params);
             return;
         }
+
+        /* feedback mechanism needs to do word expansion first */
         if (params.containsKey("fb"))
             if (params.get("fb").equalsIgnoreCase("true")) {
                 qPairs = queryExpansion(params, model, qPairs);
             }
+
         /**
          *  The index is open. Start evaluating queries.
          *  The general pattern is to tokenize the  query term (so that it
@@ -359,10 +366,9 @@ public class MainEval {
      * */
     public static void letor(RetrievalModelLearnToRank r, Map<String, String> params) throws Exception {
         LearnToRank.initPara(r, params);
-        LearnToRank.calFeatureForTrain();
         LearnToRank.train();
-
-       // LearnToRank.classify();
+        LearnToRank.calFinalResult();
+        LearnToRank.classify();
     }
      /**
      * Run All Query

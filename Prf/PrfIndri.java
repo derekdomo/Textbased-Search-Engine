@@ -20,6 +20,7 @@ public class PrfIndri {
             DocLengthStore dls = new DocLengthStore(MainEval.READER);
             long length = dls.getDocLength("body");
             Map<String, Double> existTerms = new HashMap<String, Double>();
+            //Iterate all the documents to get all the terms
             for (Map.Entry<TermVector, ScoreDocCombine> entry1 : docs.entrySet()) {
                 TermVector it = entry1.getKey();
                 for (int i=1; i<it.stemsLength(); i++){
@@ -69,6 +70,7 @@ public class PrfIndri {
                     break;
                 else
                     count++;
+                System.out.println(entry1.getKey());
                 String termname = entry1.getKey();
                 double score = entry1.getValue().score;
                 query=query+" "+String.valueOf(score)+" "+termname+" ";
